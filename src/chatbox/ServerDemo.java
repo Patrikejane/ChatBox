@@ -12,9 +12,9 @@ import javax.swing.JFrame;
  */
 public class ServerDemo {
     public static void main (String[] args){
-        Server sally = new Server();
-        sally.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        sally.onStart();
+        Server sampleServer = new Server();
+        sampleServer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        sampleServer.onStart();
         
     }
 }
