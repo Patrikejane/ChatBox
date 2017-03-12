@@ -44,25 +44,57 @@ public class Client extends ChatBoxSuper{
         setVisible(true);
     }
     
+    
+    
 
     @Override
     public void onStart() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try{
+            onDelayConnection();
+            initStream();
+            onConnection();
+            
+        }
+        catch(EOFException eofException){
+            showMessage("\n Client loss connection");
+        }
+        catch(IOException ioException){
+            ioException.printStackTrace();
+        }
+        finally{
+            onEndConnection();
+        }
+        
     }
 
     @Override
     public void onDelayConnection() throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        showMessage("Connecting......");
+        connection = new Socket(InetAddress.getByName(serverIP),6789);
+        showMessage("connected to : " + connection.getInetAddress().getHostName());
     }
 
     @Override
     public void initStream() throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        outMassage = new ObjectOutputStream(connection.getOutputStream());
+        outMassage.flush();
+        inMassage = new ObjectInputStream(connection.getInputStream());
+        showMessage("\n ..streams are setup . . ");
     }
 
     @Override
     public void onConnection() throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String message = "Connected : ";
+        sendMessage(message);
+        activateFields(true);
+        do {
+            try {
+                message = (String) inMassage.readObject(); // read the massage 
+                showMessage("/n" + message);
+            } catch (ClassNotFoundException CNFException) {
+                showMessage("WTF");
+            }
+        } while (!message.equals("CLIENT - END"));
     }
 
     @Override
