@@ -52,8 +52,7 @@ public class Client extends ChatBoxSuper{
         try{
             onDelayConnection();
             initStream();
-            onConnection();
-            
+            onConnection(); 
         }
         catch(EOFException eofException){
             showMessage("\n Client loss connection");
@@ -84,8 +83,6 @@ public class Client extends ChatBoxSuper{
 
     @Override
     public void onConnection() throws IOException {
-        String message = "Connected : ";
-        sendMessage(message);
         activateFields(true);
         do {
             try {
@@ -99,22 +96,48 @@ public class Client extends ChatBoxSuper{
 
     @Override
     public void onEndConnection() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        showMessage("/n closing connection..");
+        activateFields(false);
+        try {
+            outMassage.close();
+            inMassage.close();
+            connection.close();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
     }
 
     @Override
     public void sendMessage(String message) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            outMassage.writeObject("CLIENT - " + message);
+            outMassage.flush();
+            showMessage("/nCLIENT - " + message);
+        } catch (IOException ioException) {
+            displayArea.append("/n ERROR");
+        }
     }
 
     @Override
     public void showMessage(String text) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        SwingUtilities.invokeLater(
+                new Runnable() {
+                    public void run() {
+                        displayArea.append(text);
+                    }
+                }
+        );
     }
 
     @Override
     public void activateFields(boolean value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        SwingUtilities.invokeLater(
+                new Runnable() {
+                    public void run() {
+                        typeArea.setEditable(value);
+                    }
+                }
+        );
     }
-    
+
 }
