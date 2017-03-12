@@ -13,9 +13,9 @@ import javax.swing.JFrame;
  */
 public class ClientDemo {
     public static void main (String[] args){
-        Server cOne = new Server();
-        cOne.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        cOne.onStart();
+        Client sampleClient = new Client("127.0.0.1");
+        sampleClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        sampleClient.onStart();
         
     }
 }
